@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { getTaskData } from "../data/data";
+import { useContext, useState } from "react";
+import { TaskContext } from "../contexts";
 import AddModal from "./AddModal";
 import SearchBar from "./SearchBar";
 import TasksList from "./TasksList";
 
 export default function TasksTable() {
-  const [tasksData, setTasksData] = useState(getTaskData());
   const [showModal, setShowModal] = useState(false);
   const [editTask, setEditTask] = useState(null);
   const [search, setSearch] = useState("");
+  const { tasksData, dispatch } = useContext(TaskContext);
 
+  // Task Add Or Edit
   function handleAddTask(newTask, isAdd) {
     if (isAdd) {
-      setTasksData([...tasksData, newTask]);
+      dispatch({
+        type: "ADD_TASK",
+        payload: newTask,
+      });
     } else {
-      setTasksData(
-        tasksData.map((task) => {
-          if (task.id === newTask.id) {
-            return newTask;
-          }
-          return task;
-        })
-      );
+      dispatch({
+        type: "EDIT_TASK",
+        payload: newTask,
+      });
     }
     setShowModal(false);
   }
@@ -31,29 +31,30 @@ export default function TasksTable() {
     setShowModal(true);
   }
 
+  // Toggle Favourite
   function handleChangeFavourite(taskId) {
-    const toggled = tasksData.map((task) => {
-      if (task.id === taskId) {
-        return { ...task, isFavourite: !task.isFavourite };
-      } else {
-        return task;
-      }
+    dispatch({
+      type: "IS_FAVOURITE",
+      payload: taskId,
     });
-
-    setTasksData(toggled);
   }
 
+  // Delete Task
   function handleDeleteTask(taskId) {
-    const filtered = tasksData.filter((task) => task.id !== taskId);
-
-    setTasksData(filtered);
+    dispatch({
+      type: "DELETE_TASK",
+      payload: taskId,
+    });
   }
 
+  // Delete All Tasks
   function handleDeleteAllTask() {
-    tasksData.length = 0;
-    setTasksData([...tasksData]);
+    dispatch({
+      type: "DELETE_ALL_TASK",
+    });
   }
 
+  //Search Task
   const searchList = tasksData?.filter((task) =>
     task.title.toLowerCase().includes(search.toLowerCase())
   );
