@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { TaskContext } from "../contexts";
+import { TaskContext, TaskDeleteIdContext } from "../contexts";
 import AddModal from "./AddModal";
 import DeleteModal from "./DeleteModal";
 import SearchBar from "./SearchBar";
@@ -8,12 +8,11 @@ import TasksList from "./TasksList";
 
 export default function TasksTable() {
   const { tasksData, dispatch } = useContext(TaskContext);
-
+  const { setDeleteId } = useContext(TaskDeleteIdContext);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editTask, setEditTask] = useState(null);
   const [search, setSearch] = useState("");
-  const [deleteId, setDeleteId] = useState(null);
 
   // Task Add Or Edit
   function handleAddTask(newTask, isAdd) {
@@ -48,7 +47,7 @@ export default function TasksTable() {
   }
 
   // Delete Task
-  function handleDeleteTask(isAllDelete) {
+  function handleDeleteTask(isAllDelete, deleteId) {
     if (isAllDelete) {
       dispatch({
         type: "DELETE_ALL_TASK",
@@ -87,7 +86,6 @@ export default function TasksTable() {
       {showDeleteModal && (
         <DeleteModal
           onDelete={handleDeleteTask}
-          deleteId={deleteId}
           onCancel={handleCancelDelete}
         />
       )}
@@ -108,7 +106,6 @@ export default function TasksTable() {
               onEdit={handleEditTask}
               onFavourite={handleChangeFavourite}
               onDeleteModal={setShowDeleteModal}
-              setDeleteId={setDeleteId}
             />
           ) : (
             <p className="text-center text-2xl">Task List is Empty !!</p>

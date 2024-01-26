@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { TaskDeleteIdContext } from "../contexts";
 
 // eslint-disable-next-line react/prop-types
-export default function DeleteModal({ onDelete, onCancel, deleteId }) {
+export default function DeleteModal({ onDelete, onCancel }) {
+  const { deleteId } = useContext(TaskDeleteIdContext);
   const [isAllDelete] = useState(Object.is(deleteId, null));
-
   return (
     <>
       <div className="bg-black bg-opacity-70 h-full w-full z-10 fixed top-0 left-0 flex items-center justify-center mx-auto">
@@ -36,7 +37,7 @@ export default function DeleteModal({ onDelete, onCancel, deleteId }) {
               No, Cancel
             </button>
             <button
-              onClick={() => onDelete(isAllDelete)}
+              onClick={() => onDelete(isAllDelete, deleteId)}
               type="button"
               className="rounded bg-red-500 px-4 py-2 text-white transition-all hover:opacity-80"
             >

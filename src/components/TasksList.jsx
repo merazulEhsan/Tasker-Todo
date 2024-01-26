@@ -1,12 +1,15 @@
 /* eslint-disable react/prop-types */
 
+import { useContext } from "react";
+import { TaskDeleteIdContext } from "../contexts";
+
 export default function TasksList({
   taskData,
   onEdit,
   onFavourite,
-  setDeleteId,
   onDeleteModal,
 }) {
+  const { setDeleteId } = useContext(TaskDeleteIdContext);
   return (
     <div className="overflow-auto">
       <table className="table-fixed overflow-auto xl:w-full">
