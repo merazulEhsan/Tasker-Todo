@@ -1,14 +1,19 @@
 import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import { TaskContext } from "../contexts";
 import AddModal from "./AddModal";
+import DeleteModal from "./DeleteModal";
 import SearchBar from "./SearchBar";
 import TasksList from "./TasksList";
 
 export default function TasksTable() {
+  const { tasksData, dispatch } = useContext(TaskContext);
+
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editTask, setEditTask] = useState(null);
   const [search, setSearch] = useState("");
-  const { tasksData, dispatch } = useContext(TaskContext);
+  const [deleteId, setDeleteId] = useState(null);
 
   // Task Add Or Edit
   function handleAddTask(newTask, isAdd) {
@@ -17,11 +22,14 @@ export default function TasksTable() {
         type: "ADD_TASK",
         payload: newTask,
       });
+      toast.success("New Task Added Successfully");
     } else {
       dispatch({
         type: "EDIT_TASK",
         payload: newTask,
       });
+
+      newTask && toast.success(`Task ${newTask.title} Edited Successfully`);
     }
     setShowModal(false);
   }
@@ -40,18 +48,26 @@ export default function TasksTable() {
   }
 
   // Delete Task
-  function handleDeleteTask(taskId) {
-    dispatch({
-      type: "DELETE_TASK",
-      payload: taskId,
-    });
+  function handleDeleteTask(isAllDelete) {
+    if (isAllDelete) {
+      dispatch({
+        type: "DELETE_ALL_TASK",
+      });
+      toast.success("All Tasks Deleted Successfully");
+    } else {
+      dispatch({
+        type: "DELETE_TASK",
+        payload: deleteId,
+      });
+      toast.success("Your Selected Task Deleted Successfully");
+    }
+    setShowDeleteModal(false);
+    setDeleteId(null);
   }
 
-  // Delete All Tasks
-  function handleDeleteAllTask() {
-    dispatch({
-      type: "DELETE_ALL_TASK",
-    });
+  function handleCancelDelete() {
+    setShowDeleteModal(false);
+    setDeleteId(null);
   }
 
   //Search Task
@@ -68,14 +84,22 @@ export default function TasksTable() {
           onCancel={() => setShowModal(false)}
         />
       )}
+      {showDeleteModal && (
+        <DeleteModal
+          onDelete={handleDeleteTask}
+          deleteId={deleteId}
+          onCancel={handleCancelDelete}
+        />
+      )}
+
       <div className="container">
         <div className="rounded-xl border border-[rgba(206,206,206,0.12)] bg-[#1D212B] px-6 py-8 md:px-9 md:py-16">
           <SearchBar
             onAddTask={() => {
               setShowModal(true), setEditTask(null);
             }}
-            onDeleteAll={handleDeleteAllTask}
             onSearch={setSearch}
+            setShowDeleteModal={setShowDeleteModal}
           />
 
           {tasksData.length > 0 ? (
@@ -83,7 +107,8 @@ export default function TasksTable() {
               taskData={searchList}
               onEdit={handleEditTask}
               onFavourite={handleChangeFavourite}
-              onDelete={handleDeleteTask}
+              onDeleteModal={setShowDeleteModal}
+              setDeleteId={setDeleteId}
             />
           ) : (
             <p className="text-center text-2xl">Task List is Empty !!</p>

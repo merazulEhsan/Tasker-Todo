@@ -1,6 +1,12 @@
 /* eslint-disable react/prop-types */
 
-export default function TasksList({ taskData, onEdit, onFavourite, onDelete }) {
+export default function TasksList({
+  taskData,
+  onEdit,
+  onFavourite,
+  setDeleteId,
+  onDeleteModal,
+}) {
   return (
     <div className="overflow-auto">
       <table className="table-fixed overflow-auto xl:w-full">
@@ -73,7 +79,9 @@ export default function TasksList({ taskData, onEdit, onFavourite, onDelete }) {
                 <td>
                   <div className="flex items-center justify-center space-x-3">
                     <button
-                      onClick={() => onDelete(task.id)}
+                      onClick={() => {
+                        onDeleteModal(true), setDeleteId(task.id);
+                      }}
                       className="text-red-500"
                     >
                       Delete

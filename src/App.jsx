@@ -1,4 +1,6 @@
 import { useReducer } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Footer from "./components/Footer";
 import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
@@ -19,6 +21,7 @@ export default function App() {
         <TasksTable />
         <Footer />
       </div>
+      <ToastContainer />
     </TaskContext.Provider>
   );
 }
