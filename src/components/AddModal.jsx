@@ -34,16 +34,16 @@ export default function AddModal({ onSave, editTask, onCancel }) {
 
   return (
     <>
-      <div className="bg-black bg-opacity-70 h-full w-full z-10 fixed top-0 left-0 flex items-center justify-center mx-auto">
+      <div className="bg-black bg-opacity-70 h-full w-full z-50 fixed top-0 left-0 flex items-center justify-center mx-auto overflow-y-scroll">
         <form
           onSubmit={handleSubmit}
-          className="mx-auto my-10 w-full  max-w-[740px] rounded-xl border border-[#FEFBFB]/[36%] bg-[#191D26] p-9 max-md:px-4 lg:my-20 lg:p-11 relative top-12 z-50"
+          className="mx-auto my-10 w-full  max-w-[740px] rounded-xl border border-[#FEFBFB]/[36%] bg-[#191D26] p-9 max-md:px-4 lg:my-20 lg:p-11 relative  z-50"
         >
           <h2 className="mb-9 text-center text-2xl font-bold text-white lg:mb-11 lg:text-[28px]">
             {isAdd ? "Add New Task" : "Edit Task"}
           </h2>
 
-          <div className="space-y-5 text-white lg:space-y-10">
+          <div className="space-y-5 text-white lg:space-y-5">
             <div className="space-y-2 lg:space-y-3">
               <label htmlFor="title">Title</label>
               <input
@@ -59,7 +59,7 @@ export default function AddModal({ onSave, editTask, onCancel }) {
             <div className="space-y-2 lg:space-y-3">
               <label htmlFor="description">Description</label>
               <textarea
-                className="block min-h-[120px] w-full rounded-md bg-[#2D323F] px-3 py-2.5 lg:min-h-[180px]"
+                className="block min-h-[120px] w-full rounded-md bg-[#2D323F] px-3 py-2.5"
                 type="text"
                 name="description"
                 id="description"
@@ -100,7 +100,7 @@ export default function AddModal({ onSave, editTask, onCancel }) {
             </div>
           </div>
 
-          <div className="mt-16 flex justify-center lg:mt-20 gap-4">
+          <div className="mt-16 flex justify-center lg:mt-16 gap-4">
             <button
               type="submit"
               className="rounded bg-blue-600 px-4 py-2 text-white transition-all hover:opacity-80"
